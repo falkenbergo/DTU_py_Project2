@@ -13,15 +13,18 @@ from inputNumber import inputNumber
 def displayMenu(options):
     
 # =============================================================================
-#     DISPLAYMENU Displays a menu of options, ask the user to choose
-#     and returns the number of the menu item chosen.
-#     
-#     Usage: choice = displayMenu(options)
-#     
-#     Input options Menu options (cell array of strings)
-#     Output choice Chosen option (integer)
-#     
-#     Display menu options
+# Displays a menu of options, ask  user to choose from the list of options
+# and returns the number of the options that was chosen.
+# 
+# Usage: 
+#     choice = displayMenu(options)
+# 
+# Input:
+#     options: Menu options (list with np.array)
+# 
+# Output:
+#     choice: Chosen option (integer)
+#
 #
 #  - Taken from class lecture
 # =============================================================================
@@ -32,6 +35,6 @@ def displayMenu(options):
     # Get a valid menu choice
     choice = 0
     while not(np.any(choice == np.arange(len(options))+1)):
-        choice = inputNumber("Please choose a menu item: ")
+        choice = inputNumber("Please choose an option from the menu: ", options)
         
     return choice
