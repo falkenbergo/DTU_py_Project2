@@ -28,6 +28,9 @@ from displayMenu import displayMenu
 from data_aggregation import aggregate_measurements
 
 
+# Import statistics function
+from data_statistics import print_statistics
+
 #from dataStatistics import dataStatistics
 #from dataPlot import dataPlot
 
@@ -81,6 +84,8 @@ while True:
                 
             elif (agg_choise == 3):
                 tvec_a, data_a = aggregate_measurements(tvec, data, 'month')
+                print(tvec_a)
+                print(data_a)
                 
             elif (agg_choise == 4):
                 tvec_a, data_a = aggregate_measurements(tvec, data, 'hours of the day')
@@ -94,6 +99,8 @@ while True:
         if data_loaded and aggregated:
             # Implement displaying statistics here
             print("Displaying statistics.")
+            print_statistics(tvec_a, data_a)
+            
         else:
             print("Please load and aggregate data first.")
 
