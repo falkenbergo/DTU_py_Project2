@@ -56,12 +56,16 @@ while True:
                         filltype = displayMenu(menuDataload)
                         if (filltype == 1):
                             tvec, data = load_measurements(filename, 'forward fill')
+                            
                         elif (filltype == 2):
                             tvec, data = load_measurements(filename, 'backward fill')
+                            
                         elif (filltype == 3):
                             tvec, data = load_measurements(filename, 'drop')
+                            
                         else:
                             print('Wrong input')
+                            
                         data_loaded = True
                         break
                     else:
@@ -84,8 +88,6 @@ while True:
                 
             elif (agg_choise == 3):
                 tvec_a, data_a = aggregate_measurements(tvec, data, 'month')
-                print(tvec_a)
-                print(data_a)
                 
             elif (agg_choise == 4):
                 tvec_a, data_a = aggregate_measurements(tvec, data, 'hours of the day')
@@ -96,10 +98,10 @@ while True:
             print("Please load data first.")
 
     elif choice == 3:  # Display statistics
-        if data_loaded and aggregated:
+        if data_loaded:
             # Implement displaying statistics here
             print("Displaying statistics.")
-            print_statistics(tvec_a, data_a)
+            print_statistics(tvec, data)
             
         else:
             print("Please load and aggregate data first.")

@@ -128,9 +128,5 @@ def load_measurements(filename, fmode):
     # Reurn both timevector and data
     return (tvec, data)
 
-tvec, data = load_measurements("test.txt", "backward fill")
-print(tvec)
-print(data)
-
 
 
