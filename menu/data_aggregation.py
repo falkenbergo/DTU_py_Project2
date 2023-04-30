@@ -9,46 +9,55 @@ import numpy as np
 
 def aggregate_measurements(tvec, data, period):
     if period == 'hour':
-        # aggregate by hour
-        tvec_a = np.unique(tvec[:,:4], axis=0) # get distinct year/month/day/hour combinations
-        data_a = np.zeros((tvec_a.shape[0], 4))
-        for i in range(tvec_a.shape[0]):
-            idx = np.all(tvec[:,:4] == tvec_a[i], axis=1) # find all rows with matching year/month/day/hour
-            data_a[i] = np.sum(data[idx], axis=0) # sum the data for all matching rows
-            tvec_a[i, 4:] = [0, 0] # set minute and second to 0 for the beginning of the hour
         
+        # Get the hourly timestamp by rounding down the minutes and seconds
+        tvec_hourly = tvec[:, :4]
+        tvec_hourly[:, 1:] = np.floor(tvec_hourly[:, 1:] / [60, 60])
+        # Get the unique hourly timestamps
+        tvec_unique, indices = np.unique(tvec_hourly, axis=0, return_inverse=True)
+        # Aggregate the data by summing over each unique timestamp
+        data_aggregated = np.zeros((len(tvec_unique), data.shape[1]))
+        for i in range(len(tvec_unique)):
+            data_aggregated[i] = np.sum(data[indices == i], axis=0)
+        # Return the aggregated data and the corresponding hourly timestamps
+        return (tvec_unique, data_aggregated)
     elif period == 'day':
-        # aggregate by day
-        tvec_a = np.unique(tvec[:,:3], axis=0) # get distinct year/month/day combinations
-        data_a = np.zeros((tvec_a.shape[0], 4))
-        for i in range(tvec_a.shape[0]):
-            idx = np.all(tvec[:,:3] == tvec_a[i], axis=1) # find all rows with matching year/month/day
-            data_a[i] = np.sum(data[idx], axis=0) # sum the data for all matching rows
-            tvec_a[i, 3:] = [0, 0, 0] # set hour, minute, and second to 0 for the beginning of the day
-        
+        # Get the daily timestamp by rounding down the hours, minutes and seconds
+        tvec_daily = tvec[:, :3]
+        tvec_daily[:, 2] = np.floor(tvec_daily[:, 2] / 24)
+        # Get the unique daily timestamps
+        tvec_unique, indices = np.unique(tvec_daily, axis=0, return_inverse=True)
+        # Aggregate the data by summing over each unique timestamp
+        data_aggregated = np.zeros((len(tvec_unique), data.shape[1]))
+        for i in range(len(tvec_unique)):
+            data_aggregated[i] = np.sum(data[indices == i], axis=0)
+        # Return the aggregated data and the corresponding daily timestamps
+        return (tvec_unique, data_aggregated)
     elif period == 'month':
-        # aggregate by month
-        tvec_a = np.unique(tvec[:,:2], axis=0) # get distinct year/month combinations
-        data_a = np.zeros((tvec_a.shape[0], 4))
-        for i in range(tvec_a.shape[0]):
-            idx = np.all(tvec[:,:2] == tvec_a[i], axis=1) # find all rows with matching year/month
-            data_a[i] = np.sum(data[idx], axis=0) # sum the data for all matching rows
-            tvec_a[i, 2:] = [1, 0, 0, 0] # set day, hour, minute, and second to the beginning of the month
-        
+        # Get the monthly timestamp by rounding down the days, hours, minutes and seconds
+        tvec_monthly = tvec[:, :2]
+        tvec_monthly[:, 1] = np.floor(tvec_monthly[:, 1] / 30)
+        # Get the unique monthly timestamps
+        tvec_unique, indices = np.unique(tvec_monthly, axis=0, return_inverse=True)
+        # Aggregate the data by summing over each unique timestamp
+        data_aggregated = np.zeros((len(tvec_unique), data.shape[1]))
+        for i in range(len(tvec_unique)):
+            data_aggregated[i] = np.sum(data[indices == i], axis=0)
+        # Return the aggregated data and the corresponding monthly timestamps
+        return (tvec_unique, data_aggregated)
     elif period == 'hour of the day':
-        # aggregate by hour of the day
-        tvec_a = np.zeros((24, 6))
-        tvec_a[:, 3] = np.arange(24) # set hour column to 0-23
-        data_a = np.zeros((24, 4))
+        # Get the hour of the day as a decimal number
+        tvec_hour_of_day = tvec[:, 3] + tvec[:, 4] / 60 + tvec[:, 5] / 3600
+        # Aggregate the data by hour of the day
+        data_aggregated = np.zeros((24, data.shape[1]))
         for i in range(24):
-            idx = tvec[:,3] == i # find all rows with matching hour
-            data_a[i] = np.mean(data[idx], axis=0) # average the data for all matching rows
-            tvec_a[i, 3:] = [i, 0, 0] # set minute and second to 0 for the beginning of the hour
-        
-    else:
-        raise ValueError('Invalid period: {}'.format(period))
-    
-    return (tvec_a, data_a)
+            data_aggregated[i] = np.mean(data[(tvec_hour_of_day >= i) & (tvec_hour_of_day < i+1)], axis=0)
+        # Return the aggregated data and the corresponding start times of the 24 time intervals
+        tvec_hourly = tvec[:, :4]
+        tvec_hourly[:, 1:] = np.floor(tvec_hourly[:, 1:] / [60, 60])
+        tvec_hourly[:, 3] += tvec_hourly[:, 2] * 24
+        tvec_unique = np.arange(24) 
+        return (tvec_unique, data_aggregated)
 
 
 tvec1 = [[2.008e+03, 1.000e+00, 5.000e+00, 1.500e+01, 8.000e+00, 0.000e+00],
@@ -70,7 +79,7 @@ data_np = np.array(data1)
 print(tvec_np)
 print(data_np)
 
-result = aggregate_measurements(tvec_np, data_np, 'day')
+result = aggregate_measurements(tvec_np, data_np, 'month')
 print('-----------------------------------------------')
 print(result)
 print('-----------------------------------------------')
