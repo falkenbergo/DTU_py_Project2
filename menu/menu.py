@@ -34,8 +34,7 @@ from rich.table import Table
 from rich.text import Text
 
 console = Console()
-# Defining boolian plot variable for "Visualize electricity consumption"
-plot = [False, False, False, False, False]
+
 ###########################################
 
 
@@ -67,7 +66,7 @@ from data_statistics import print_statistics
 #from dataStatistics import dataStatistics
 
 #Importing plot function
-from plotConsumption import plotConsumption
+from plotComparison import plotComparison
 
 
 
@@ -151,31 +150,39 @@ while True:
 # ============================================#
 #                Aggregate data               #
 # ============================================#
+
     elif choice == 2:
         if data_loaded:
+            
             while True:
                 # Implement aggregating data and error handling here
-                aggregate = np.array(["hour", "day", 'month', 'hours of the day','back'])
-                agg_choise = displayMenu(aggregate)
+                aggregate = np.array(["Hour", "Day", 'Month', 'Hours of the day','Back'])
+                agg_choice = displayMenu(aggregate)
                 
-                if (agg_choise == 1):
-                    tvec_a, data_a = aggregate_measurements(tvec, data, 'Hour')
+                if (agg_choice == 1):
+                    tvec_a, data_a = aggregate_measurements(tvec, data, 'hour')
+                    period = 'hour'
                    
-                elif (agg_choise == 2):
-                    tvec_a, data_a = aggregate_measurements(tvec, data, 'Day')
+                elif (agg_choice == 2):
+                    tvec_a, data_a = aggregate_measurements(tvec, data, 'day')
+                    period = 'day'
                     
-                elif (agg_choise == 3):
-                    tvec_a, data_a = aggregate_measurements(tvec, data, 'Month')
+                elif (agg_choice == 3):
+                    tvec_a, data_a = aggregate_measurements(tvec, data, 'month')
+                    period = 'month'
                     
-                elif (agg_choise == 4):
-                    tvec_a, data_a = aggregate_measurements(tvec, data, 'Hours of the day')
-                elif (agg_choise == 5):
+                elif (agg_choice == 4):
+                    tvec_a, data_a = aggregate_measurements(tvec, data, 'hours of the day')
+                    period = 'hour of the day'
+                    
+                elif (agg_choice == 5):
                     break
             
             aggregated = True
             print("Data aggregated successfully")
         else:
             print("Please load data first")
+
 
 
 # ============================================#
@@ -194,7 +201,11 @@ while True:
 # ============================================#
 
     elif choice == 4:
-        if data_loaded:
+        if data_loaded and aggregated:
+            
+            # Defining boolian plot variable for "Visualize electricity consumption"
+            plot = [False, False, False, False]
+            
             while True:
                 # Create a table for the plot options menu
                 menu_table = Table(title="\n[bold green]Choose what zones to visualize[bold green]", box=box.SQUARE)
@@ -215,13 +226,13 @@ while True:
                     "Back"
                 ]
     
-                # Add rows to the table with the plot options and their status
                 for idx, item in enumerate(menuPlot):
-                    if idx < 5:
+                    if idx < 4:  # Change this condition to match the number of individual zones
                         status = "✅" if plot[idx] else "❌"
                     else:
                         status = ""
                     menu_table.add_row(str(idx + 1), item, status)
+
     
                 # Print the table to the console
                 console.print(menu_table)
@@ -229,16 +240,21 @@ while True:
                 # Prompt the user to enter their choice using the inputNumber function
                 plotChoice = inputNumber("Enter your choice: ", menuPlot)
     
-                # Toggle the display status for zones 1 to 5
-                if plotChoice in np.arange(1, 6):
+                if plotChoice in np.arange(1, 5):  # Change this condition to match the number of individual zones
                     if plot[int(plotChoice) - 1] == True:
                         plot[int(plotChoice) - 1] = False
                     else:
                         plot[int(plotChoice) - 1] = True
+                
+                # Selecting all zones
+                elif plotChoice == 5:
+                    plot = [True, True, True, True]
+
     
                 # Plot the graphs based on the selected zones
+                # Update the plotComparison function call to pass the correct period
                 elif plotChoice == 6:
-                    plotConsumption(tvec, data, plot)
+                    plotComparison(tvec_a, data_a, plot, aggregate[agg_choice - 1].lower())
 
                     pass
     
