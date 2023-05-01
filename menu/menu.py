@@ -47,35 +47,64 @@ aggregated = False
 while True:
     choice = displayMenu(menuItems)
 
-    if choice == 1:  # Load data
+# =======================================#
+#  Enter filename - "Load measurements"  #
+# =======================================#
+
+    if choice == 1:
         while True:
             try:
                 filename = input('\nPlease enter filename: ')
-                if filename.endswith('.txt'):
+                if filename.endswith('.txt') or filename.endswith('.csv'):
+                
+                    # Checking if file is in the working directori
                     if os.path.isfile(filename):
-                        filltype = displayMenu(menuDataload)
-                        if (filltype == 1):
-                            tvec, data = load_measurements(filename, 'forward fill')
-                            
-                        elif (filltype == 2):
-                            tvec, data = load_measurements(filename, 'backward fill')
-                            
-                        elif (filltype == 3):
-                            tvec, data = load_measurements(filename, 'drop')
-                            
-                        else:
-                            print('Wrong input')
-                            
-                        data_loaded = True
+    
+                        # =======================================#
+                        #  Choose what to do with corrupted data #
+                        # =======================================#
+    
+                        corruptedMenuItems = np.array(["Forward fill", "Backward fill", "Drop corrupted data", "Cancel"])
+    
+                        while True:
+                            print(f"\n\033[38;2;10;150;180mPlease choose how to handle corrupted data:\033[0m")
+
+                            corruptedChoice = displayMenu(corruptedMenuItems)
+    
+                            if corruptedChoice == 1:
+                                tvec, data = load_measurements(filename, "forward fill")
+                                data_loaded = True
+                                break
+                            elif corruptedChoice == 2:
+                                tvec, data = load_measurements(filename, "backward fill")
+                                data_loaded = True
+                                break
+                            elif corruptedChoice == 3:
+                                tvec, data = load_measurements(filename, "drop")
+                                data_loaded = True
+                                break
+                            elif corruptedChoice == 4:
+                                break
+                            else:
+                                print("Invalid choice, please try again...")
                         break
+    
                     else:
-                        raise FileNotFoundError(f"\n\033[38;2;255;100;100mERROR:\033[38;2;100;255;0mFilename:'{filename}'\033[0m does not exist in the directory. \nPlease try again")
+                        raise FileNotFoundError(f"\n\033[38;2;255;100;100mERROR:\033[38;2;100;255;0mFilename:'{filename}'\033[0m does not exist in the path. \nPlease try again")
+                
                 else:
-                    raise ValueError(f"\n\033[38;2;255;100;100mERROR:\033[38;2;100;255;0mFilename:'{filename}'\033[0m Are missing the filetype .txt. \nPlease try again")
+                    raise ValueError(f"\n\033[38;2;255;100;100mERROR:\033[38;2;100;255;0mFilename:'{filename}'\033[0m are missing the filetype .txt or .csv \nPlease try again")
+    
+            # Prints out if one af the error occurs in loading data
             except (ValueError, FileNotFoundError) as error_loadData:
                 print(error_loadData)
 
-    elif choice == 2:  # Aggregate data
+
+  
+# ============================================#
+#                Aggregate data               #
+# ============================================#
+  elif choice == 2
         if data_loaded:
             # Implement aggregating data and error handling here
             aggregate = np.array(["hour", "day", 'month', 'hours of the day'])
@@ -97,25 +126,33 @@ while True:
         else:
             print("Please load data first.")
 
-    elif choice == 3:  # Display statistics
-        if data_loaded:
-            # Implement displaying statistics here
-            print("Displaying statistics.")
-            print_statistics(tvec, data)
-            
-        else:
-            print("Please load and aggregate data first.")
 
-    elif choice == 4:  # Visualize electricity consumption
+# ============================================#
+#              Display statistics             #
+# ============================================#
+    elif choice == 3:
+        if data_loaded and aggregated:
+            # Implement displaying statistics here
+            print("Displaying statistics")
+        else:
+            print("\033[38;2;255;100;100mERROR:\033[38;2;100;255;0m You must load and aggregate data first.\033[0m\n")
+
+# ============================================#
+#       Visualize electricity consumption     #
+# ============================================#
+    elif choice == 4:
         if data_loaded and aggregated:
             # Implement visualizing electricity consumption here
-            print("Visualizing electricity consumption.")
+            print("Visualizing electricity consumption")
         else:
-            print("Please load and aggregate data first.")
+            print("\033[38;2;255;100;100mERROR:\033[38;2;100;255;0m You must load and aggregate data first.\033[0m\n")
 
-    elif choice == 5:  # Quit
-        print("Exiting the program.")
+# ============================================#
+#                    Quit                     #
+# ============================================#
+    elif choice == 5:
+        print("Exiting the program")
         break
-
+    
     else:
-        print("Invalid choice. Please try again.")
+        print("Invalid choice, please try again...")
