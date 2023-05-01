@@ -110,16 +110,16 @@ while True:
             aggregate = np.array(["hour", "day", 'month', 'hours of the day'])
             agg_choise = displayMenu(aggregate)
             if (agg_choise == 1):
-                tvec_a, data_a = aggregate_measurements(tvec, data, 'hour')
+                tvec_a, data_a = aggregate_measurements(tvec, data, 'Hour')
                
             elif (agg_choise == 2):
-                tvec_a, data_a = aggregate_measurements(tvec, data, 'day')
+                tvec_a, data_a = aggregate_measurements(tvec, data, 'Day')
                 
             elif (agg_choise == 3):
-                tvec_a, data_a = aggregate_measurements(tvec, data, 'month')
+                tvec_a, data_a = aggregate_measurements(tvec, data, 'Month')
                 
             elif (agg_choise == 4):
-                tvec_a, data_a = aggregate_measurements(tvec, data, 'hours of the day')
+                tvec_a, data_a = aggregate_measurements(tvec, data, 'Hours of the day')
             
             aggregated = True
             print("Data aggregated successfully")
