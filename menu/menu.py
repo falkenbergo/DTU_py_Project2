@@ -24,19 +24,19 @@ from rich.progress import track
 from time import sleep
 
 # Visual display of loaded data and corrupted choice
-from rich import print as rprint
+from rich import print as rprint #Needed to ad rprint to handle both printf and rich
 from rich.panel import Panel
 
-############################## Test
+########### Visual plotting menu 4##########
 from rich import box
 from rich.console import Console
 from rich.table import Table
-
+from rich.text import Text
 
 console = Console()
 # Defining boolian plot variable for "Visualize electricity consumption"
 plot = [False, False, False, False, False]
-###############################
+###########################################
 
 
 # ============================================================================#
@@ -52,8 +52,9 @@ from loadingBar import process_data
 # Layout for dataLoaded and handling for corrupted data
 from display_loaded_data_info import display_loaded_data_info
 
-# Import displayMenu function
+# Import displayMenu function and inputNumber
 from displayMenu import displayMenu
+from inputNumber import inputNumber
 
 # Import aggragate data function
 from data_aggregation import aggregate_measurements
@@ -194,14 +195,14 @@ while True:
         if data_loaded:
             while True:
                 # Create a table for the plot options menu
-                menu_table = Table(title="\nChoose what zones to visualize\nStatus will show if activated or not", box=box.SQUARE)
-    
+                menu_table = Table(title="\n[bold green]Choose what zones to visualize[bold green]", box=box.SQUARE)
+                
                 # Add columns to the table with specified styles
                 menu_table.add_column("Options", justify="right", style="cyan", no_wrap=True)
-                menu_table.add_column("Description", style="magenta")
+                menu_table.add_column("Description", style="cyan")
                 menu_table.add_column("Status")
     
-                # Define the plot options
+                # Define the plot options for box
                 menuPlot = [
                     "Zone 1",
                     "Zone 2",
@@ -209,44 +210,40 @@ while True:
                     "Zone 4",
                     "All zones",
                     "Plot the choosed zones",
-                    "Return"
+                    "Back"
                 ]
     
-                # Add rows to the table with the plot options and theire status
-                # and adds teh correct status emoji
+                # Add rows to the table with the plot options and their status
                 for idx, item in enumerate(menuPlot):
                     if idx < 5:
                         status = "✅" if plot[idx] else "❌"
-                    # For options 6-7 (plot and return), set the status to an 
-                    #empty string (no status emoji needed)
                     else:
                         status = ""
                     menu_table.add_row(str(idx + 1), item, status)
     
                 # Print the table to the console
                 console.print(menu_table)
-                
-                # Prompt the user to enter their choice
-                choicePlot = int(input("Enter your choice: "))
     
-                # Toggle the display status emoji for zones 1 to 5
+                # Prompt the user to enter their choice using the inputNumber function
+                choicePlot = inputNumber("Enter your choice: ", menuPlot)
+    
+                # Toggle the display status for zones 1 to 5
                 if choicePlot in np.arange(1, 6):
                     if plot[int(choicePlot) - 1] == True:
                         plot[int(choicePlot) - 1] = False
                     else:
                         plot[int(choicePlot) - 1] = True
-                
+    
                 # Plot the graphs based on the selected zones
                 elif choicePlot == 6:
-                    
-                    "Her mangler kode til plotting"
+                    # ... (rest of your existing code for plotting)
                     pass
     
                 # Return to the main menu
                 elif choicePlot == 7:
                     break
                 else:
-                    print("\nInvalid choice, please try again...\n")
+                    print("Invalid choice, please try again...")
     
         else:
             print("\033[38;2;255;100;100mERROR:\033[38;2;100;255;0m You must load and aggregate data first.\033[0m\n")
