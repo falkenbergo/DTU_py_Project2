@@ -14,12 +14,23 @@ import numpy as np
 # Help to register if filename is present in path
 import os 
 
+# Help to doing plots in "Visualize electricity consumption"
+import matplotlib.pyplot as plt
+import pandas as pd
+
+# Loadingbar for "Load measurements"
+from rich.progress import track
+from time import sleep
+
 # ============================================================================#
 #                            IMPORTED FUNCTIONS                               #
 # ============================================================================#
 
 # Import load_measuremnts function
 from load_measurements import load_measurements
+
+# Function for loading the data. Showing a loading bar
+from loadingBar import process_data
 
 # Import displayMenu function
 from displayMenu import displayMenu
@@ -30,6 +41,7 @@ from data_aggregation import aggregate_measurements
 
 # Import statistics function
 from data_statistics import print_statistics
+
 
 #from dataStatistics import dataStatistics
 #from dataPlot import dataPlot
@@ -56,7 +68,7 @@ while True:
             try:
                 filename = input('\nPlease enter filename: ')
                 if filename.endswith('.txt') or filename.endswith('.csv'):
-                
+    
                     # Checking if file is in the working directori
                     if os.path.isfile(filename):
     
@@ -68,7 +80,7 @@ while True:
     
                         while True:
                             print(f"\n\033[38;2;10;150;180mPlease choose how to handle corrupted data:\033[0m")
-
+    
                             corruptedChoice = displayMenu(corruptedMenuItems)
     
                             if corruptedChoice == 1:
@@ -87,11 +99,16 @@ while True:
                                 break
                             else:
                                 print("Invalid choice, please try again...")
+    
+                        if data_loaded:
+                            for _ in track(range(100), description='[green]Processing data'):
+                                process_data()
+                            
                         break
     
                     else:
                         raise FileNotFoundError(f"\n\033[38;2;255;100;100mERROR:\033[38;2;100;255;0mFilename:'{filename}'\033[0m does not exist in the path. \nPlease try again")
-                
+    
                 else:
                     raise ValueError(f"\n\033[38;2;255;100;100mERROR:\033[38;2;100;255;0mFilename:'{filename}'\033[0m are missing the filetype .txt or .csv \nPlease try again")
     
@@ -141,9 +158,38 @@ while True:
 #       Visualize electricity consumption     #
 # ============================================#
     elif choice == 4:
-        if data_loaded and aggregated:
-            # Implement visualizing electricity consumption here
-            print("Visualizing electricity consumption")
+        if data_loaded:
+            # Create a pandas DataFrame with the data
+            df = pd.DataFrame(data, columns=['Zone 1', 'Zone 2', 'Zone 3', 'Zone 4'])
+    
+            # Ask the user for the type of plot they want
+            plot_type = input("Do you want to plot consumption in each zone or the combined consumption? (Enter 'zone' or 'combined'): ")
+    
+            if plot_type.lower() == 'zone':
+                # Plot consumption for each zone
+                if len(df) < 25:
+                    df.plot(kind='bar', figsize=(10, 5))
+                else:
+                    df.plot(kind='line', figsize=(10, 5))
+    
+            elif plot_type.lower() == 'combined':
+                # Plot combined consumption
+                combined_df = df.sum(axis=1)
+    
+                if len(df) < 25:
+                    combined_df.plot(kind='bar', figsize=(10, 5))
+                else:
+                    combined_df.plot(kind='line', figsize=(10, 5))
+    
+            else:
+                print("Invalid input, please enter 'zone' or 'combined'.")
+    
+            # Set plot labels and title
+            plt.xlabel('Time')
+            plt.ylabel('Consumption')
+            plt.title('Electricity Consumption')
+            plt.show()
+    
         else:
             print("\033[38;2;255;100;100mERROR:\033[38;2;100;255;0m You must load and aggregate data first.\033[0m\n")
 
