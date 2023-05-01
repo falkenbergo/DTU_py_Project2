@@ -145,20 +145,24 @@ while True:
 # ============================================#
     elif choice == 2:
         if data_loaded:
-            # Implement aggregating data and error handling here
-            aggregate = np.array(["hour", "day", 'month', 'hours of the day'])
-            agg_choise = displayMenu(aggregate)
-            if (agg_choise == 1):
-                tvec_a, data_a = aggregate_measurements(tvec, data, 'Hour')
-               
-            elif (agg_choise == 2):
-                tvec_a, data_a = aggregate_measurements(tvec, data, 'Day')
+            while True:
+                # Implement aggregating data and error handling here
+                aggregate = np.array(["hour", "day", 'month', 'hours of the day','back'])
+                agg_choise = displayMenu(aggregate)
                 
-            elif (agg_choise == 3):
-                tvec_a, data_a = aggregate_measurements(tvec, data, 'Month')
-                
-            elif (agg_choise == 4):
-                tvec_a, data_a = aggregate_measurements(tvec, data, 'Hours of the day')
+                if (agg_choise == 1):
+                    tvec_a, data_a = aggregate_measurements(tvec, data, 'Hour')
+                   
+                elif (agg_choise == 2):
+                    tvec_a, data_a = aggregate_measurements(tvec, data, 'Day')
+                    
+                elif (agg_choise == 3):
+                    tvec_a, data_a = aggregate_measurements(tvec, data, 'Month')
+                    
+                elif (agg_choise == 4):
+                    tvec_a, data_a = aggregate_measurements(tvec, data, 'Hours of the day')
+                elif (agg_choise == 5):
+                    break
             
             aggregated = True
             print("Data aggregated successfully")
