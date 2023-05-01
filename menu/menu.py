@@ -104,7 +104,7 @@ while True:
 # ============================================#
 #                Aggregate data               #
 # ============================================#
-  elif choice == 2
+    elif choice == 2:
         if data_loaded:
             # Implement aggregating data and error handling here
             aggregate = np.array(["hour", "day", 'month', 'hours of the day'])
@@ -122,9 +122,9 @@ while True:
                 tvec_a, data_a = aggregate_measurements(tvec, data, 'hours of the day')
             
             aggregated = True
-            print("Data aggregated successfully.")
+            print("Data aggregated successfully")
         else:
-            print("Please load data first.")
+            print("Please load data first")
 
 
 # ============================================#
