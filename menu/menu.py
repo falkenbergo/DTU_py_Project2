@@ -24,6 +24,12 @@ from load_measurements import load_measurements
 # Import displayMenu function
 from displayMenu import displayMenu
 
+# Import aggragate data function
+from data_aggregation import aggregate_measurements
+
+
+# Import statistics function
+from data_statistics import print_statistics
 
 #from dataStatistics import dataStatistics
 #from dataPlot import dataPlot
@@ -33,6 +39,7 @@ from displayMenu import displayMenu
 # ============================================================================#
 
 menuItems = np.array(["Load data", "Aggregate data", "Display statistics", "Visualize electricity consumption", "Quit\n"])
+menuDataload = np.array(["Forward fill", "Backward fill", 'Drop'])
 
 data_loaded = False
 aggregated = False
@@ -46,7 +53,19 @@ while True:
                 filename = input('\nPlease enter filename: ')
                 if filename.endswith('.txt'):
                     if os.path.isfile(filename):
-                        data = load_measurements(filename)
+                        filltype = displayMenu(menuDataload)
+                        if (filltype == 1):
+                            tvec, data = load_measurements(filename, 'forward fill')
+                            
+                        elif (filltype == 2):
+                            tvec, data = load_measurements(filename, 'backward fill')
+                            
+                        elif (filltype == 3):
+                            tvec, data = load_measurements(filename, 'drop')
+                            
+                        else:
+                            print('Wrong input')
+                            
                         data_loaded = True
                         break
                     else:
@@ -59,15 +78,31 @@ while True:
     elif choice == 2:  # Aggregate data
         if data_loaded:
             # Implement aggregating data and error handling here
+            aggregate = np.array(["hour", "day", 'month', 'hours of the day'])
+            agg_choise = displayMenu(aggregate)
+            if (agg_choise == 1):
+                tvec_a, data_a = aggregate_measurements(tvec, data, 'hour')
+               
+            elif (agg_choise == 2):
+                tvec_a, data_a = aggregate_measurements(tvec, data, 'day')
+                
+            elif (agg_choise == 3):
+                tvec_a, data_a = aggregate_measurements(tvec, data, 'month')
+                
+            elif (agg_choise == 4):
+                tvec_a, data_a = aggregate_measurements(tvec, data, 'hours of the day')
+            
             aggregated = True
             print("Data aggregated successfully.")
         else:
             print("Please load data first.")
 
     elif choice == 3:  # Display statistics
-        if data_loaded and aggregated:
+        if data_loaded:
             # Implement displaying statistics here
             print("Displaying statistics.")
+            print_statistics(tvec, data)
+            
         else:
             print("Please load and aggregate data first.")
 
