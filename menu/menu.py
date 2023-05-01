@@ -19,9 +19,12 @@ import matplotlib.pyplot as plt
 import pandas as pd
 
 # Loadingbar for "Load measurements"
+from rich.progress import Progress
 from rich.progress import track
 from time import sleep
 
+from rich import print as rprint
+from rich.panel import Panel
 # ============================================================================#
 #                            IMPORTED FUNCTIONS                               #
 # ============================================================================#
@@ -31,6 +34,9 @@ from load_measurements import load_measurements
 
 # Function for loading the data. Showing a loading bar
 from loadingBar import process_data
+
+# Layout for dataLoaded and handling for corrupted data
+from display_loaded_data_info import display_loaded_data_info
 
 # Import displayMenu function
 from displayMenu import displayMenu
@@ -46,6 +52,20 @@ from data_statistics import print_statistics
 #from dataStatistics import dataStatistics
 #from dataPlot import dataPlot
 
+
+
+
+def display_loaded_data_info(filename, corrupted_data_method):
+    print()
+    info_text = f"The file [bold cyan]{filename}[/bold cyan] has been loaded.\nCorrupted data has been handled using [bold cyan]{corrupted_data_method}[/bold cyan] method."
+    panel = Panel(info_text, title="Data Loaded", expand=False, border_style="green")
+    
+    # Using rprint, to utilize another way of using color
+    rprint(panel)
+
+
+
+
 # ============================================================================#
 #                                   Menu                                      #
 # ============================================================================#
@@ -57,6 +77,8 @@ data_loaded = False
 aggregated = False
 
 while True:
+    if data_loaded:
+        display_loaded_data_info(filename, corruptedData)
     choice = displayMenu(menuItems)
 
 # =======================================#
@@ -85,25 +107,25 @@ while True:
     
                             if corruptedChoice == 1:
                                 tvec, data = load_measurements(filename, "forward fill")
+                                corruptedData = "forward fill"
                                 data_loaded = True
                                 break
                             elif corruptedChoice == 2:
                                 tvec, data = load_measurements(filename, "backward fill")
+                                corruptedData = "backward fill"
                                 data_loaded = True
                                 break
                             elif corruptedChoice == 3:
                                 tvec, data = load_measurements(filename, "drop")
+                                corruptedData = "drop"
                                 data_loaded = True
                                 break
                             elif corruptedChoice == 4:
                                 break
                             else:
                                 print("Invalid choice, please try again...")
-    
-                        if data_loaded:
-                            for _ in track(range(100), description='[green]Processing data'):
-                                process_data()
-                            
+
+
                         break
     
                     else:
@@ -158,6 +180,40 @@ while True:
 #       Visualize electricity consumption     #
 # ============================================#
     elif choice == 4:
+        if data_loaded:
+            # Create a pandas DataFrame with the data
+            df = pd.DataFrame(data, columns=['Zone 1', 'Zone 2', 'Zone 3', 'Zone 4'])
+    
+            # Ask the user for the type of plot they want
+            plot_type = input("Do you want to plot consumption in each zone or the combined consumption? (Enter 'zone' or 'combined'): ")
+    
+            if plot_type.lower() == 'zone':
+                # Plot consumption for each zone
+                if len(df) < 25:
+                    df.plot(kind='bar', figsize=(10, 5))
+                else:
+                    df.plot(kind='line', figsize=(10, 5))
+    
+            elif plot_type.lower() == 'combined':
+                # Plot combined consumption
+                combined_df = df.sum(axis=1)
+    
+                if len(df) < 25:
+                    combined_df.plot(kind='bar', figsize=(10, 5))
+                else:
+                    combined_df.plot(kind='line', figsize=(10, 5))
+    
+            else:
+                print("Invalid input, please enter 'zone' or 'combined'.")
+    
+            # Set plot labels and title
+            plt.xlabel('Time')
+            plt.ylabel('Consumption')
+            plt.title('Electricity Consumption')
+            plt.show()
+    
+        else:
+            print("\033[38;2;255;100;100mERROR:\033[38;2;100;255;0m You must load and aggregate data first.\033[0m\n")
 
 # ============================================#
 #                    Quit                     #

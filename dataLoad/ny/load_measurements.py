@@ -6,46 +6,31 @@ Created on Tue Apr 18 10:50:47 2023
 """
 
 import numpy as np
-from rich.progress import Progress
 
 def load_measurements(filename, fmode):
     
     
-    # Count total number of lines in the file
+    # Read the file line by line, split each line into values, and remove space
     with open(filename) as file:
-        total_lines = sum(1 for _ in file)
-
-    # Create a progress bar
-    progress_bar = Progress()
-    task_id = progress_bar.add_task("[green]Loading data...", total=total_lines)
-    
-    # Start the progress bar
-    with progress_bar:
-        # Read the file line by line, split each line into values, and remove space
-        with open(filename) as file:
-            lines = []
-            line_number = 0
+        lines = []
+        line_number = 0
+        
+        for line in file:
+            line_number += 1 # Keep track of line number
+            values = line.strip().split(',') # Remove spaces and split each line
+            column_number = 0
             
-            for line in file:
-                line_number += 1 # Keep track of line number
-                values = line.strip().split(',') # Remove spaces and split each line
-                column_number = 0
+            for value in values:
+                column_number += 1 # Keep track of column number
                 
-                for value in values:
-                    column_number += 1 # Keep track of column number
-                    
-                    # Trying converting value to a number
-                    try:
-                        float(value)
-                    
-                    # If fails, then non-numeric value has been detected
-                    except ValueError:
-                        # Error message: Non-numeric values detected
-                        raise ValueError(f"File:\033[38;2;100;255;0m'{filename}'\033[0m \nNon-numeric value:'{value}' detected at line: {line_number}, column: {column_number}")
+                # Trying converting value to a number
+                try:
+                    float(value)
                 
-                # Update the progress bar
-                progress_bar.update(task_id, completed=line_number)
-    
+                # If fails, then non-numeric value has been detected
+                except ValueError:
+                    # Error message: Non-numeric values detected
+                    raise ValueError(f"File:\033[38;2;100;255;0m'{filename}'\033[0m \nNon-numeric value:'{value}' detected at line: {line_number}, column: {column_number}")
     
     # Load data and tvec(timevector) from file
     # Specific colmns has been choosen for both data and tvec
