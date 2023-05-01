@@ -53,6 +53,7 @@ def aggregate_measurements(tvec, data, period):
         
         print('------------ TVEC Day --------------')
         print(tvec_a)
+        print(len(tvec_a))
         print('--------------------------------')
         
         print('------------ DATA --------------')
@@ -81,6 +82,7 @@ def aggregate_measurements(tvec, data, period):
         
         print('------------ TVEC Month --------------')
         print(tvec_a)
+        print(len(tvec_a))
         print('--------------------------------')
         
         print('------------ DATA --------------')
@@ -107,6 +109,7 @@ def aggregate_measurements(tvec, data, period):
         
         print('------------ TVEC HOD --------------')
         print(tvec_a)
+        print(len(tvec_a))
         print('--------------------------------')
         
         print('------------ DATA --------------')
