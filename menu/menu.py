@@ -23,8 +23,22 @@ from rich.progress import Progress
 from rich.progress import track
 from time import sleep
 
+# Visual display of loaded data and corrupted choice
 from rich import print as rprint
 from rich.panel import Panel
+
+############################## Test
+from rich import box
+from rich.console import Console
+from rich.table import Table
+
+
+console = Console()
+# Defining boolian plot variable for "Visualize electricity consumption"
+plot = [False, False, False, False, False]
+###############################
+
+
 # ============================================================================#
 #                            IMPORTED FUNCTIONS                               #
 # ============================================================================#
@@ -53,15 +67,6 @@ from data_statistics import print_statistics
 #from dataPlot import dataPlot
 
 
-
-
-def display_loaded_data_info(filename, corrupted_data_method):
-    print()
-    info_text = f"The file [bold cyan]{filename}[/bold cyan] has been loaded.\nCorrupted data has been handled using [bold cyan]{corrupted_data_method}[/bold cyan] method."
-    panel = Panel(info_text, title="Data Loaded", expand=False, border_style="green")
-    
-    # Using rprint, to utilize another way of using color
-    rprint(panel)
 
 
 
@@ -180,12 +185,68 @@ while True:
         else:
             print("\033[38;2;255;100;100mERROR:\033[38;2;100;255;0m You must load and aggregate data first.\033[0m\n")
 
+
 # ============================================#
 #       Visualize electricity consumption     #
 # ============================================#
+
     elif choice == 4:
         if data_loaded:
-            print()
+            while True:
+                # Create a table for the plot options menu
+                menu_table = Table(title="\nChoose what zones to visualize\nStatus will show if activated or not", box=box.SQUARE)
+    
+                # Add columns to the table with specified styles
+                menu_table.add_column("Options", justify="right", style="cyan", no_wrap=True)
+                menu_table.add_column("Description", style="magenta")
+                menu_table.add_column("Status")
+    
+                # Define the plot options
+                menuPlot = [
+                    "Zone 1",
+                    "Zone 2",
+                    "Zone 3",
+                    "Zone 4",
+                    "All zones",
+                    "Plot the choosed zones",
+                    "Return"
+                ]
+    
+                # Add rows to the table with the plot options and theire status
+                # and adds teh correct status emoji
+                for idx, item in enumerate(menuPlot):
+                    if idx < 5:
+                        status = "✅" if plot[idx] else "❌"
+                    # For options 6-7 (plot and return), set the status to an 
+                    #empty string (no status emoji needed)
+                    else:
+                        status = ""
+                    menu_table.add_row(str(idx + 1), item, status)
+    
+                # Print the table to the console
+                console.print(menu_table)
+                
+                # Prompt the user to enter their choice
+                choicePlot = int(input("Enter your choice: "))
+    
+                # Toggle the display status emoji for zones 1 to 5
+                if choicePlot in np.arange(1, 6):
+                    if plot[int(choicePlot) - 1] == True:
+                        plot[int(choicePlot) - 1] = False
+                    else:
+                        plot[int(choicePlot) - 1] = True
+                
+                # Plot the graphs based on the selected zones
+                elif choicePlot == 6:
+                    
+                    "Her mangler kode til plotting"
+                    pass
+    
+                # Return to the main menu
+                elif choicePlot == 7:
+                    break
+                else:
+                    print("\nInvalid choice, please try again...\n")
     
         else:
             print("\033[38;2;255;100;100mERROR:\033[38;2;100;255;0m You must load and aggregate data first.\033[0m\n")
