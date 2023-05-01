@@ -65,7 +65,9 @@ from data_statistics import print_statistics
 
 
 #from dataStatistics import dataStatistics
-#from dataPlot import dataPlot
+
+#Importing plot function
+from plotConsumption import plotConsumption
 
 
 
@@ -225,22 +227,23 @@ while True:
                 console.print(menu_table)
     
                 # Prompt the user to enter their choice using the inputNumber function
-                choicePlot = inputNumber("Enter your choice: ", menuPlot)
+                plotChoice = inputNumber("Enter your choice: ", menuPlot)
     
                 # Toggle the display status for zones 1 to 5
-                if choicePlot in np.arange(1, 6):
-                    if plot[int(choicePlot) - 1] == True:
-                        plot[int(choicePlot) - 1] = False
+                if plotChoice in np.arange(1, 6):
+                    if plot[int(plotChoice) - 1] == True:
+                        plot[int(plotChoice) - 1] = False
                     else:
-                        plot[int(choicePlot) - 1] = True
+                        plot[int(plotChoice) - 1] = True
     
                 # Plot the graphs based on the selected zones
-                elif choicePlot == 6:
-                    # ... (rest of your existing code for plotting)
+                elif plotChoice == 6:
+                    plotConsumption(tvec, data, plot)
+
                     pass
     
                 # Return to the main menu
-                elif choicePlot == 7:
+                elif plotChoice == 7:
                     break
                 else:
                     print("Invalid choice, please try again...")
