@@ -23,8 +23,21 @@ from rich.progress import Progress
 from rich.progress import track
 from time import sleep
 
-from rich import print as rprint
+# Visual display of loaded data and corrupted choice
+from rich import print as rprint #Needed to ad rprint to handle both printf and rich
 from rich.panel import Panel
+
+########### Visual plotting menu 4##########
+from rich import box
+from rich.console import Console
+from rich.table import Table
+from rich.text import Text
+
+console = Console()
+
+###########################################
+
+
 # ============================================================================#
 #                            IMPORTED FUNCTIONS                               #
 # ============================================================================#
@@ -38,8 +51,9 @@ from loadingBar import process_data
 # Layout for dataLoaded and handling for corrupted data
 from display_loaded_data_info import display_loaded_data_info
 
-# Import displayMenu function
+# Import displayMenu function and inputNumber
 from displayMenu import displayMenu
+from inputNumber import inputNumber
 
 # Import aggragate data function
 from data_aggregation import aggregate_measurements
@@ -50,18 +64,11 @@ from data_statistics import print_statistics
 
 
 #from dataStatistics import dataStatistics
-#from dataPlot import dataPlot
+
+#Importing plot function
+from plotComparison import plotComparison
 
 
-
-
-def display_loaded_data_info(filename, corrupted_data_method):
-    print()
-    info_text = f"The file [bold cyan]{filename}[/bold cyan] has been loaded.\nCorrupted data has been handled using [bold cyan]{corrupted_data_method}[/bold cyan] method."
-    panel = Panel(info_text, title="Data Loaded", expand=False, border_style="green")
-    
-    # Using rprint, to utilize another way of using color
-    rprint(panel)
 
 
 
@@ -143,40 +150,42 @@ while True:
 # ============================================#
 #                Aggregate data               #
 # ============================================#
+
     elif choice == 2:
         if data_loaded:
+            
             while True:
                 # Implement aggregating data and error handling here
                 aggregate = np.array([' Consumption per min (no aggregation)'," Consumption per hour", " Consumption per day", ' Consumption per month', ' Hour-of-day consumption (hourly avg)',' Back'])
-                agg_choise = displayMenu(aggregate)
-                
+                agg_choice = displayMenu(aggregate)
+
                 if (agg_choise == 1):
                     tvec_a, data_a = tvec, data
-                    break
-                    
-                elif (agg_choise == 2):
+
+                elif (agg_choice == 2):
                     tvec_a, data_a = aggregate_measurements(tvec, data, 'hour')
-                    break
+                    period = 'hour'
                    
-                elif (agg_choise == 3):
+                elif (agg_choice == 3):
                     tvec_a, data_a = aggregate_measurements(tvec, data, 'day')
-                    break
+                    period = 'day'
                     
-                elif (agg_choise == 4):
+                elif (agg_choice == 4):
                     tvec_a, data_a = aggregate_measurements(tvec, data, 'month')
-                    break
+                    period = 'month'
                     
-                elif (agg_choise == 5):
+                elif (agg_choice == 5):
                     tvec_a, data_a = aggregate_measurements(tvec, data, 'hours of the day')
-                    break
+                    period = 'hour of the day'
                     
-                elif (agg_choise == 6):
+                elif (agg_choice == 6):
                     break
             
             aggregated = True
             print("Data aggregated successfully")
         else:
             print("Please load data first")
+
 
 
 # ============================================#
@@ -194,12 +203,74 @@ while True:
         else:
             print("\033[38;2;255;100;100mERROR:\033[38;2;100;255;0m You must load and aggregate data first.\033[0m\n")
 
+
 # ============================================#
 #       Visualize electricity consumption     #
 # ============================================#
+
     elif choice == 4:
-        if data_loaded:
-            print()
+        if data_loaded and aggregated:
+            
+            # Defining boolian plot variable for "Visualize electricity consumption"
+            plot = [False, False, False, False]
+            
+            while True:
+                # Create a table for the plot options menu
+                menu_table = Table(title="\n[bold green]Choose what zones to visualize[bold green]", box=box.SQUARE)
+                
+                # Add columns to the table with specified styles
+                menu_table.add_column("Options", justify="right", style="cyan", no_wrap=True)
+                menu_table.add_column("Description", style="cyan")
+                menu_table.add_column("Status")
+    
+                # Define the plot options for box
+                menuPlot = [
+                    "Zone 1",
+                    "Zone 2",
+                    "Zone 3",
+                    "Zone 4",
+                    "All zones",
+                    "Plot the choosed zones",
+                    "Back"
+                ]
+    
+                for idx, item in enumerate(menuPlot):
+                    if idx < 4:  # Change this condition to match the number of individual zones
+                        status = "✅" if plot[idx] else "❌"
+                    else:
+                        status = ""
+                    menu_table.add_row(str(idx + 1), item, status)
+
+    
+                # Print the table to the console
+                console.print(menu_table)
+    
+                # Prompt the user to enter their choice using the inputNumber function
+                plotChoice = inputNumber("Enter your choice: ", menuPlot)
+    
+                if plotChoice in np.arange(1, 5):  # Change this condition to match the number of individual zones
+                    if plot[int(plotChoice) - 1] == True:
+                        plot[int(plotChoice) - 1] = False
+                    else:
+                        plot[int(plotChoice) - 1] = True
+                
+                # Selecting all zones
+                elif plotChoice == 5:
+                    plot = [True, True, True, True]
+
+    
+                # Plot the graphs based on the selected zones
+                # Update the plotComparison function call to pass the correct period
+                elif plotChoice == 6:
+                    plotComparison(tvec_a, data_a, plot, aggregate[agg_choice - 1].lower())
+
+                    pass
+    
+                # Return to the main menu
+                elif plotChoice == 7:
+                    break
+                else:
+                    print("Invalid choice, please try again...")
     
         else:
             print("\033[38;2;255;100;100mERROR:\033[38;2;100;255;0m You must load and aggregate data first.\033[0m\n")
