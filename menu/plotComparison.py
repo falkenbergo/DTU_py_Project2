@@ -1,4 +1,3 @@
-
 # -*- coding: utf-8 -*-
 """
 Created on Mon May  1 17:56:26 2023
@@ -8,15 +7,16 @@ Created on Mon May  1 17:56:26 2023
 import matplotlib.pyplot as plt
 import numpy as np
 
-#Importing timeFormat function
+# Importing timeFormat function
 from timeFormat import timeFormat
 
-def plotComparison(tvec, data, plot, period):
+
+def plotComparison(tvec, data, plot, combine_zones, period):
     # Use the format_time function to format the time values based on the period
     formatted_tvec = timeFormat(tvec, period)
 
     # Define the labels for each zone
-    labels = ["Zone 1", "Zone 2", "Zone 3", "Zone 4", "Combined"]
+    labels = ["Zone 1", "Zone 2", "Zone 3", "Zone 4"]
 
     # Filter the data based on the selected zones
     filtered_data = data[:, np.array(plot, dtype=bool)]
@@ -32,15 +32,37 @@ def plotComparison(tvec, data, plot, period):
     ax.set_xlabel("Time")
     ax.set_ylabel("Consumption")
 
-    # Loop through each zone and plot the data
-    for i, zone_label in enumerate(labels):
-        if plot[i]:
-            if use_bar_chart:
-                # Use a bar chart if there are less than 25 measurements
-                ax.bar(formatted_tvec, filtered_data[:, i], label=zone_label)
-            else:
-                # Use a line chart if there are 25 or more measurements
-                ax.plot(formatted_tvec, filtered_data[:, i], label=zone_label)
+    # Initialize the bottom array for stacking the bars
+    bottom = np.zeros(len(formatted_tvec))
+
+    should_plot_combined = combine_zones and not use_bar_chart and np.sum(plot) > 1
+
+    selected_zones = []
+    # Loop through each selected zone and plot the data
+    zone_index = 0
+    for i, selected in enumerate(plot):
+        if selected:
+            zone_label = labels[i]
+            zone_data = filtered_data[:, zone_index]
+
+            if not should_plot_combined:
+                if use_bar_chart:
+                    # Use a bar chart and stack the bars on top of each other
+                    ax.bar(formatted_tvec, zone_data, label=zone_label, bottom=bottom)
+                    bottom += zone_data  # Update the bottom array for stacking
+                else:
+                    # Use a line chart
+                    ax.plot(formatted_tvec, zone_data, label=zone_label)
+
+            selected_zones.append(zone_label)
+            zone_index += 1
+
+    if should_plot_combined:
+        # If using a line chart and combine_zones is True, add a line for the combined data
+        combined_data = np.sum(filtered_data, axis=1)
+        # Shows exactly what zones have been combined
+        combined_label = f"Combined zones ({', '.join(selected_zones)})"
+        ax.plot(formatted_tvec, combined_data, label=combined_label)
 
     # Add a legend to the plot
     ax.legend()
@@ -51,4 +73,4 @@ def plotComparison(tvec, data, plot, period):
     # Show the plot
     plt.show()
 
-    print("formatted_tvec shape:", formatted_tvec.shape, "filtered_data[:, i] shape:", filtered_data[:, i].shape)
+
