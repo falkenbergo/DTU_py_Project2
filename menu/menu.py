@@ -104,7 +104,7 @@ while True:
 # ============================================#
 #                Aggregate data               #
 # ============================================#
-  elif choice == 2
+    elif choice == 2:
         if data_loaded:
             # Implement aggregating data and error handling here
             aggregate = np.array(["hour", "day", 'month', 'hours of the day'])
