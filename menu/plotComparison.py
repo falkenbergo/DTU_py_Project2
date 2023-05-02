@@ -32,7 +32,7 @@ def plotComparison(tvec, data, plot, combine_zones, period):
 
     # Set the title and labels for the axes
     ax.set_title("Electricity Consumption")
-    ax.set_xlabel("Time")
+    ax.set_xlabel(f"Time ({period.capitalize()})")
     ax.set_ylabel("Consumption (kW)")
 
     # Initialize the bottom array for stacking the bars
