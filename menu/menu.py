@@ -159,7 +159,7 @@ while True:
                 aggregate = np.array([' Consumption per min (no aggregation)'," Consumption per hour", " Consumption per day", ' Consumption per month', ' Hour-of-day consumption (hourly avg)',' Back'])
                 agg_choice = displayMenu(aggregate)
 
-                if (agg_choise == 1):
+                if (agg_choice == 1):
                     tvec_a, data_a = tvec, data
 
                 elif (agg_choice == 2):
