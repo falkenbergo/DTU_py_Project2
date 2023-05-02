@@ -18,68 +18,70 @@ def plotComparison(tvec, data, plot, combine_zones, period):
     formatted_tvec = np.array(timeFormat(tvec, period))
 
 
-    # Define the labels for each zone
+    # Define labels for zones
     labels = ["Zone 1", "Zone 2", "Zone 3", "Zone 4"]
-
-    # Filter the data based on the selected zones
+    
+    # Filter data based on selected zones
     filtered_data = data[:, np.array(plot, dtype=bool)]
-
-    # Convert the data to kW by dividing by 1000
+    
+    # Convert data to kW by dividing by 1000
     filtered_data_kw = filtered_data / 1000
-
-    # Check if the aggregated data contains less than 25 measurements
+    
+    # Check if data contains less than 25 measurements
     use_bar_chart = len(formatted_tvec) < 25
-
-    # Create a figure and axis for the plot
+    
+    # Create figure and axis for plot
     fig, ax = plt.subplots()
-
-    # Set the title and labels for the axes
+    
+    # Set title and labels for axes
     ax.set_title("Electricity Consumption")
     ax.set_xlabel(f"Time ({period.capitalize()})")
     ax.set_ylabel("Consumption (kW)")
-
-    # Initialize the bottom array for stacking the bars
+    
+    # Initialize the bottom array for stacking bars
     bottom = np.zeros(len(formatted_tvec))
-
+    
     should_plot_combined = combine_zones and np.sum(plot) > 1
-
+    
     selected_zones = []
-    # Loop through each selected zone and plot the data
+    # Loop through selected zones and plot data
     zone_index = 0
     for i, selected in enumerate(plot):
         if selected:
             zone_label = labels[i]
             zone_data = filtered_data_kw[:, zone_index]
-
+    
             if not should_plot_combined:
                 if use_bar_chart:
-                    # Use a bar chart and stack the bars on top of each other
+                    # Use bar chart and stack bars on top of each other
                     ax.bar(formatted_tvec, zone_data, label=zone_label, bottom=bottom)
-                    bottom += zone_data  # Update the bottom array for stacking
+                    bottom += zone_data  # Update bottom array for stacking
                     print("use bar")
                 
                 else:
-                    # Use a line chart
+                    # Uses line chart
                     ax.plot(formatted_tvec, zone_data, label=zone_label)
-
+    
             selected_zones.append(zone_label)
             zone_index += 1
-
+    
     if should_plot_combined:
-        # If using a line chart and combine_zones is True, add a line for the combined data
+        # If using line chart and combine_zones is True then add line for combined data
         combined_data = np.sum(filtered_data_kw, axis=1)
-        # Shows exactly what zones have been combined
+        # Shows what zones are combined
         combined_label = f"Combined zones ({', '.join(selected_zones)})"
+        #Plotting
         ax.plot(formatted_tvec, combined_data, label=combined_label)
-
-    # Add a legend to the plot
+    
+    # Legend to the plot
     ax.legend()
-
-    # Rotate the x-axis labels for better readability
+    
+    # Rotate x-axis labels for better readability
     plt.xticks(rotation=45)
-
+    
     # Show the plot
     plt.show()
+
 
 
 
