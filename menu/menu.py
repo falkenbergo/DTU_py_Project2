@@ -267,7 +267,7 @@ while True:
                 # Plot the graphs based on the selected zones
                 # Update the plotComparison function call to pass the correct period
                 elif plotChoice == 6:
-                    plotComparison(tvec_a, data_a, plot, combine_zones, aggregate[agg_choice - 1].lower())
+                    plotComparison(tvec_a, data_a, plot, combine_zones, period)
     
                 # Return to the main menu
                 elif plotChoice == 7:
