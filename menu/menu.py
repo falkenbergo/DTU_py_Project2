@@ -162,6 +162,7 @@ while True:
                 if (agg_choice == 1):
                     tvec_a, data_a = tvec, data
                     period = 'sec'
+                    break
 
                 elif (agg_choice == 2):
                     tvec_a, data_a = aggregate_measurements(tvec, data, 'hour')
@@ -185,6 +186,10 @@ while True:
                     
                 elif (agg_choice == 6):
                     break
+                
+                else:
+                    print("Invalid choice, please try again...")
+                    
             
             aggregated = True
             print("Data aggregated successfully")
@@ -197,10 +202,9 @@ while True:
 #              Display statistics             #
 # ============================================#
     elif choice == 3:
-        print("Displaying statistics")
-        if data_loaded:
-            if aggregated == True:
-                print_statistics(tvec_a, data_a, period)
+        if data_loaded & aggregated:
+            print("Displaying statistics")
+            print_statistics(tvec_a, data_a, period)
         else:
             print("\033[38;2;255;100;100mERROR:\033[38;2;100;255;0m You must load and aggregate data first.\033[0m\n")
 
