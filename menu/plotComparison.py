@@ -21,6 +21,9 @@ def plotComparison(tvec, data, plot, combine_zones, period):
     # Filter the data based on the selected zones
     filtered_data = data[:, np.array(plot, dtype=bool)]
 
+    # Convert the data to kW by dividing by 1000
+    filtered_data_kw = filtered_data / 1000
+
     # Check if the aggregated data contains less than 25 measurements
     use_bar_chart = len(formatted_tvec) < 25
 
@@ -29,8 +32,8 @@ def plotComparison(tvec, data, plot, combine_zones, period):
 
     # Set the title and labels for the axes
     ax.set_title("Electricity Consumption")
-    ax.set_xlabel("Time")
-    ax.set_ylabel("Consumption")
+    ax.set_xlabel(f"Time ({period.capitalize()})")
+    ax.set_ylabel("Consumption (kW)")
 
     # Initialize the bottom array for stacking the bars
     bottom = np.zeros(len(formatted_tvec))
@@ -43,7 +46,7 @@ def plotComparison(tvec, data, plot, combine_zones, period):
     for i, selected in enumerate(plot):
         if selected:
             zone_label = labels[i]
-            zone_data = filtered_data[:, zone_index]
+            zone_data = filtered_data_kw[:, zone_index]
 
             if not should_plot_combined:
                 if use_bar_chart:
@@ -59,7 +62,7 @@ def plotComparison(tvec, data, plot, combine_zones, period):
 
     if should_plot_combined:
         # If using a line chart and combine_zones is True, add a line for the combined data
-        combined_data = np.sum(filtered_data, axis=1)
+        combined_data = np.sum(filtered_data_kw, axis=1)
         # Shows exactly what zones have been combined
         combined_label = f"Combined zones ({', '.join(selected_zones)})"
         ax.plot(formatted_tvec, combined_data, label=combined_label)
