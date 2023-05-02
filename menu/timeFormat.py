@@ -7,6 +7,8 @@ Created on Mon May  1 18:37:37 2023
 
 from datetime import datetime
 
+import calendar
+
 def timeFormat(tvec, period):
     # Add a print statement to check the input data
     print("Input tvec:", tvec)
@@ -20,11 +22,15 @@ def timeFormat(tvec, period):
         for row in tvec:
             # Get the year, month, and day values from the row as integers
             year, month, day = row[:3].astype(int)
-            # Append the formatted time string to the list
-            formatted_tvec.append(f"{year}/{month}/{day}")
+            # If the period is 'month', display the month names instead of numbers
+            if period == "month":
+                month_name = calendar.month_name[month]
+                formatted_tvec.append(f"{month_name}")
+            else:
+                formatted_tvec.append(f"{year}/{month}/{day}")
 
     # If the period is 'hour' or 'min_sec', format the time as "year/month/day - hour:minute:second"
-    elif period in ["hour", "min_sec"]:
+    elif period in ["hour", "sec"]:
         for row in tvec:
             # Get the year, month, day, hour, minute, and second values from the row as integers
             year, month, day, hour, minute, second = row.astype(int)

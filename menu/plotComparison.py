@@ -1,3 +1,5 @@
+
+
 # -*- coding: utf-8 -*-
 """
 Created on Mon May  1 17:56:26 2023
@@ -13,7 +15,8 @@ from timeFormat import timeFormat
 
 def plotComparison(tvec, data, plot, combine_zones, period):
     # Use the format_time function to format the time values based on the period
-    formatted_tvec = timeFormat(tvec, period)
+    formatted_tvec = np.array(timeFormat(tvec, period))
+
 
     # Define the labels for each zone
     labels = ["Zone 1", "Zone 2", "Zone 3", "Zone 4"]
@@ -38,7 +41,7 @@ def plotComparison(tvec, data, plot, combine_zones, period):
     # Initialize the bottom array for stacking the bars
     bottom = np.zeros(len(formatted_tvec))
 
-    should_plot_combined = combine_zones and not use_bar_chart and np.sum(plot) > 1
+    should_plot_combined = combine_zones and np.sum(plot) > 1
 
     selected_zones = []
     # Loop through each selected zone and plot the data
@@ -53,6 +56,8 @@ def plotComparison(tvec, data, plot, combine_zones, period):
                     # Use a bar chart and stack the bars on top of each other
                     ax.bar(formatted_tvec, zone_data, label=zone_label, bottom=bottom)
                     bottom += zone_data  # Update the bottom array for stacking
+                    print("use bar")
+                
                 else:
                     # Use a line chart
                     ax.plot(formatted_tvec, zone_data, label=zone_label)
@@ -75,5 +80,8 @@ def plotComparison(tvec, data, plot, combine_zones, period):
 
     # Show the plot
     plt.show()
+
+
+
 
 
