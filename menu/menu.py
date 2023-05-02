@@ -156,11 +156,12 @@ while True:
             
             while True:
                 # Implement aggregating data and error handling here
-                aggregate = np.array([' Consumption per min (no aggregation)'," Consumption per hour", " Consumption per day", ' Consumption per month', ' Hour-of-day consumption (hourly avg)',' Back'])
+                aggregate = np.array([" Consumption per min (no aggregation)"," Consumption per hour", " Consumption per day", " Consumption per month", " Hour-of-day consumption (hourly avg)"," Back"])
                 agg_choice = displayMenu(aggregate)
 
                 if (agg_choice == 1):
                     tvec_a, data_a = tvec, data
+                    period = 'sec'
 
                 elif (agg_choice == 2):
                     tvec_a, data_a = aggregate_measurements(tvec, data, 'hour')
@@ -178,7 +179,7 @@ while True:
                     break
                     
                 elif (agg_choice == 5):
-                    tvec_a, data_a = aggregate_measurements(tvec, data, 'hours of the day')
+                    tvec_a, data_a = aggregate_measurements(tvec, data, "hours of the day")
                     period = 'hour of the day'
                     break
                     
@@ -196,14 +197,12 @@ while True:
 #              Display statistics             #
 # ============================================#
     elif choice == 3:
-        if data_loaded and aggregated:
-            # Implement displaying statistics here
-            print("Displaying statistics")
-            if data_loaded:
-                if aggregated == True:
-                    print_statistics(tvec_a, data_a)
-                else:
-                    print_statistics(tvec, data)
+        print("Displaying statistics")
+        if data_loaded:
+            if aggregated == True:
+                print_statistics(tvec_a, data_a)
+            else:
+                print_statistics(tvec, data)
         else:
             print("\033[38;2;255;100;100mERROR:\033[38;2;100;255;0m You must load and aggregate data first.\033[0m\n")
 
