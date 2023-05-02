@@ -24,6 +24,7 @@ def aggregate_measurements(tvec, data, period):
         tvec_a = np.hstack((tvec_unique, np.zeros((tvec_unique.shape[0], 2), dtype=tvec_unique.dtype)))
     #    tvec_a = np.hstack((np.zeros((tvec_a.shape[0], 3), dtype=tvec_a.dtype), tvec_a))
         
+        """
         print('------------ TVEC Hour --------------')
         print(tvec_a)
         print(len(tvec_a))
@@ -32,6 +33,8 @@ def aggregate_measurements(tvec, data, period):
         print('------------ DATA --------------')
         print(data_a)
         print('--------------------------------')
+        
+        """
         
         return (tvec_a, data_a)
 
@@ -51,6 +54,7 @@ def aggregate_measurements(tvec, data, period):
         tvec_a = np.hstack((tvec_unique, np.zeros((tvec_unique.shape[0], 3), dtype=tvec_unique.dtype)))
         tvec_a = np.hstack((np.zeros((tvec_a.shape[0], 1), dtype=tvec_a.dtype), tvec_a))
         
+        """
         print('------------ TVEC Day --------------')
         print(tvec_a)
         print(len(tvec_a))
@@ -59,6 +63,7 @@ def aggregate_measurements(tvec, data, period):
         print('------------ DATA --------------')
         print(data_a)
         print('--------------------------------')
+        """
         
         return (tvec_a, data_a)
         
@@ -79,7 +84,7 @@ def aggregate_measurements(tvec, data, period):
         
         tvec_a = np.hstack((tvec_unique, np.zeros((tvec_unique.shape[0], 4), dtype=tvec_unique.dtype)))
         tvec_a = np.hstack((np.zeros((tvec_a.shape[0], 1), dtype=tvec_a.dtype), tvec_a))
-        
+        """
         print('------------ TVEC Month --------------')
         print(tvec_a)
         print(len(tvec_a))
@@ -88,6 +93,7 @@ def aggregate_measurements(tvec, data, period):
         print('------------ DATA --------------')
         print(data_a)
         print('--------------------------------')
+        """
         
         return (tvec_a, data_a)
         
@@ -107,6 +113,8 @@ def aggregate_measurements(tvec, data, period):
         tvec_a = np.hstack((tvec_unique, np.zeros((tvec_unique.shape[0], 2), dtype=tvec_unique.dtype)))
         tvec_a = np.hstack((np.zeros((tvec_a.shape[0], 3), dtype=tvec_a.dtype), tvec_a))
         
+        
+        """
         print('------------ TVEC HOD --------------')
         print(tvec_a)
         print(len(tvec_a))
@@ -115,6 +123,7 @@ def aggregate_measurements(tvec, data, period):
         print('------------ DATA --------------')
         print(data_a)
         print('--------------------------------')
+        """
         
         return (tvec_a, data_a)
 

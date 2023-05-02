@@ -200,9 +200,7 @@ while True:
         print("Displaying statistics")
         if data_loaded:
             if aggregated == True:
-                print_statistics(tvec_a, data_a)
-            else:
-                print_statistics(tvec, data)
+                print_statistics(tvec_a, data_a, period)
         else:
             print("\033[38;2;255;100;100mERROR:\033[38;2;100;255;0m You must load and aggregate data first.\033[0m\n")
 
