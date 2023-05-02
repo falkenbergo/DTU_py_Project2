@@ -5,8 +5,12 @@ Created on Mon April  29 20:37:36 2023
 @author: Marc(s195088)
 """
 
-from datetime import datetime
+# ============================================================================#
+#                                LIBRARIES                                    #
+# ============================================================================#
 
+#Using these libraries to display the correct month with the data 
+from datetime import datetime
 import calendar
 
 #==============================================================================
