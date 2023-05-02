@@ -8,6 +8,34 @@ Created on Tue Apr 18 10:50:47 2023
 import numpy as np
 from rich.progress import Progress
 
+#==============================================================================
+# Function: load_measurements
+# Purpose: Read data from a file and handle corrupted measurements based on the
+#          chosen method.
+#
+# Usage:
+#     tvec, data = load_measurements(filename, fmode)
+#
+# Input:
+#     filename: A string with the filename of a data file
+#     fmode: A string specifying how to handle corrupted measurements
+#            ('forward fill', 'backward fill', or 'drop')
+#
+# Output:
+#     tvec: An N x 6 matrix where each row is a time vector
+#     data: An N x 4 matrix where each row is a set of measurements
+#
+# Notes: 
+#   - Data file contains measurements of electricity consumption in a
+#     household with 4 zones. Corrupted measurements have the value -1.
+#
+#   - It also has the ability to show a loadingbar when data loads.
+#
+#- Written by Marc(s195088)
+#==============================================================================
+
+
+
 def load_measurements(filename, fmode):
     
     
