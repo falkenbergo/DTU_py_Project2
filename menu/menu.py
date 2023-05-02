@@ -166,18 +166,22 @@ while True:
                 elif (agg_choice == 2):
                     tvec_a, data_a = aggregate_measurements(tvec, data, 'hour')
                     period = 'hour'
+                    break
                    
                 elif (agg_choice == 3):
                     tvec_a, data_a = aggregate_measurements(tvec, data, 'day')
                     period = 'day'
+                    break
                     
                 elif (agg_choice == 4):
                     tvec_a, data_a = aggregate_measurements(tvec, data, 'month')
                     period = 'month'
+                    break
                     
                 elif (agg_choice == 5):
                     tvec_a, data_a = aggregate_measurements(tvec, data, "hours of the day")
                     period = 'hour of the day'
+                    break
                     
                 elif (agg_choice == 6):
                     break
@@ -207,16 +211,20 @@ while True:
 #       Visualize electricity consumption     #
 # ============================================#
 
+
     elif choice == 4:
         if data_loaded and aggregated:
-            
-            # Defining boolian plot variable for "Visualize electricity consumption"
+    
+            # Defining boolean plot variables for the zones
             plot = [False, False, False, False]
-            
+    
+            # Initialize combine_zones variable
+            combine_zones = False
+    
             while True:
                 # Create a table for the plot options menu
                 menu_table = Table(title="\n[bold green]Choose what zones to visualize[bold green]", box=box.SQUARE)
-                
+    
                 # Add columns to the table with specified styles
                 menu_table.add_column("Options", justify="right", style="cyan", no_wrap=True)
                 menu_table.add_column("Description", style="cyan")
@@ -228,18 +236,19 @@ while True:
                     "Zone 2",
                     "Zone 3",
                     "Zone 4",
-                    "All zones",
-                    "Plot the choosed zones",
+                    "Combine chosen zones",
+                    "Plot the chosen zones",
                     "Back"
                 ]
     
                 for idx, item in enumerate(menuPlot):
                     if idx < 4:  # Change this condition to match the number of individual zones
                         status = "✅" if plot[idx] else "❌"
+                    elif idx == 4:
+                        status = "✅" if combine_zones else "❌"
                     else:
                         status = ""
                     menu_table.add_row(str(idx + 1), item, status)
-
     
                 # Print the table to the console
                 console.print(menu_table)
@@ -247,23 +256,18 @@ while True:
                 # Prompt the user to enter their choice using the inputNumber function
                 plotChoice = inputNumber("Enter your choice: ", menuPlot)
     
-                if plotChoice in np.arange(1, 5):  # Change this condition to match the number of individual zones
-                    if plot[int(plotChoice) - 1] == True:
-                        plot[int(plotChoice) - 1] = False
-                    else:
-                        plot[int(plotChoice) - 1] = True
-                
-                # Selecting all zones
+                # Number of individual zones is 4, then 1,4
+                if plotChoice in np.arange(1, 5):  
+                    plot[int(plotChoice) - 1] = not plot[int(plotChoice) - 1]
+    
+                # Handle the "Combine chosen zones" option (option 5) separately
                 elif plotChoice == 5:
-                    plot = [True, True, True, True]
-
+                    combine_zones = not combine_zones
     
                 # Plot the graphs based on the selected zones
                 # Update the plotComparison function call to pass the correct period
                 elif plotChoice == 6:
-                    plotComparison(tvec_a, data_a, plot, aggregate[agg_choice - 1].lower())
-
-                    pass
+                    plotComparison(tvec_a, data_a, plot, combine_zones, aggregate[agg_choice - 1].lower())
     
                 # Return to the main menu
                 elif plotChoice == 7:
@@ -278,7 +282,7 @@ while True:
 #                    Quit                     #
 # ============================================#
     elif choice == 5:
-        print("Exiting the program")
+        print("\nExiting the program")
         break
     
     else:

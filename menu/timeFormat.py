@@ -8,6 +8,10 @@ Created on Mon May  1 18:37:37 2023
 from datetime import datetime
 
 def timeFormat(tvec, period):
+    # Add a print statement to check the input data
+    print("Input tvec:", tvec)
+    print("Input period:", period)
+
     # Initialize an empty list to store the formatted time values
     formatted_tvec = []
 
@@ -30,6 +34,9 @@ def timeFormat(tvec, period):
     # If the period is 'hour of the day', create a list of hours from 0 to 23 as strings
     elif period == "hour of the day":
         formatted_tvec = [str(hour) for hour in range(24)]
+
+    # Add a print statement to check the output data
+    print("Output formatted_tvec:", formatted_tvec)
 
     # Return the list of formatted time values
     return formatted_tvec
