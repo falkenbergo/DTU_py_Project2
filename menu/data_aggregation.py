@@ -91,7 +91,7 @@ def aggregate_measurements(tvec, data, period):
         
         return (tvec_a, data_a)
         
-    elif period == 'hours of the day':
+    elif period == 'hour of the day':
         tvec_hourly = tvec[:,3 :4]  #Only look at "hour" row
 
         tvec_unique, indices = np.unique(tvec_hourly, axis=0, return_inverse=True) #Find unique instances of hour row
