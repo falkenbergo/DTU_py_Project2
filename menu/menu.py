@@ -177,7 +177,7 @@ while True:
                     break
                     
                 elif (agg_choice == 5):
-                    tvec_a, data_a = aggregate_measurements(tvec, data, "hours of the day")
+                    tvec_a, data_a = aggregate_measurements(tvec, data, "hour of the day")
                     period = 'hour of the day'
                     break
                     

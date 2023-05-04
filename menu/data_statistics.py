@@ -1,27 +1,36 @@
+# -*- coding: utf-8 -*-
+"""
+Created on Sat Apr 29 16:40:53 2023
 
+@author: Anders S184198
+"""
+
+# Import required libraries
 import numpy as np
-#import pandas as pd
 import pandas as pd
-#from numerize import numerize
 
+# Define a function to print statistics for the given data
 def print_statistics(tvec, data, period):
+    # Create a percentile vector for calculating statistics
     percentileVec = np.array([0, 25, 50, 75, 100])
 
+    # Calculate statistics for each column (zone) in the data
     stats = np.array([[np.percentile(data[:, j], p) for p in percentileVec] for j in range(4)])
 
-    # Add row with sum of columns
+    # Add a row with the sum of columns
     stats = np.vstack([stats, stats.sum(axis=0)])
 
-    # Convert units
+    # Convert units by dividing the stats by 1000 until all elements are less than 10000
     divisions = 0
     while np.any(stats > 10000):
         stats /= 1000
         divisions += 1
 
+    # Define the appropriate unit string based on the number of divisions
     prefix = ['', 'k', 'M', 'G', 'T']
     unit = prefix[divisions] + 'Wh' + ' / ' + period
 
-    # Create and format DataFrame
+    # Create and format axis to display the statistics
     xLabels = np.array(["Minimum", "1. quart.", "2. quart.", "3. quart.", "Maximum"])
     yLabels = np.array(["1", "2", "3", "4", "All"])
 
@@ -29,52 +38,9 @@ def print_statistics(tvec, data, period):
     stat_table.columns.name = "Zone"
     stat_table = stat_table.round(3)
 
-    # Center unit string
+    # Center the unit string for a better display
     dashes_line_length = 70 - len(unit) - len("***      ***")
     centered_unit = unit.center(dashes_line_length)
 
-    print("\n-------------------------------------------------------\n***{}***\n-------------------------------------------------------\n{}\n-------------------------------------------------------\n".format(centered_unit, stat_table))
-
-"""
-def print_statistics(tvec, data, period):
-    
-    printTable = np.zeros([5,5])
-    percentileVec = np.array([0, 25, 50, 75, 100])
-    
-    for j in range(4):
-        for i in range(5):
-            printTable[j, i] = (np.percentile(data[:, j], percentileVec[i]))
-            
-    for i in range(5):
-        printTable[4, i] = np.sum(printTable[0:4, i])
-    
-    printTable, divisions = convert_unit(printTable)
-    print(divisions)
-    print(period)
-    prefix = ['', 'k', 'M', 'G', 'T'] 
-    unit = prefix[divisions] + 'Wh' + ' / ' + period
-    centered_unit = unit.center(45 - len("***      ***"))
-    print(unit)
-    
- #   tableVec = numerize.numerize(tableVec)
-    
-    xLabels = np.array(["Minimum", "1. quart.", "2. quart.", "3. quart.", "Maximum"])
-    yLabels = np.array(["1", "2", "3", "4", "All"])
-    stat_table = pd.DataFrame(printTable, yLabels, xLabels)     # Make the panda table ready for printing
-    stat_table.columns.name = "Zone"
-    stat_table = stat_table.round(3)                            # Round the values to 3 decimals
- #   
-    print("\n-------------------------------------------------------\n***       {}        ***\n-------------------------------------------------------\n{}\n-------------------------------------------------------\n".format(centered_unit, stat_table))
-
-
-def convert_unit(tableVec):
-    divisions = 0
-    for n in range(len(tableVec[0])):
-        for m in range(len(tableVec)):
-            if(tableVec[n,m] > 10000):
-                tableVec = tableVec / 1000
-                divisions =+ 1
-    return(tableVec, divisions)
-                
-    """              
-            
+    # Print the formatted statistics table with a header and footer
+    print("\n///////////////////////////////////////////////////////\n***{}***\n///////////////////////////////////////////////////////\n{}\n///////////////////////////////////////////////////////\n".format(centered_unit, stat_table))

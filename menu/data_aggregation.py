@@ -2,119 +2,84 @@
 """
 Created on Sat Apr 29 16:40:53 2023
 
-@author: ander
+@author: Anders S184198
 """
 
 import numpy as np
 
 def aggregate_measurements(tvec, data, period):
     if period == 'hour':
-        tvec_hourly = tvec[:,0 :4]  #Only look at "hour" row
+        #Only look at "hour" colum
+        tvec_hourly = tvec[:,0 :4]  
 
-        tvec_unique, indices = np.unique(tvec_hourly, axis=0, return_inverse=True) #Find unique instances of hour row
-
+        #Find unique instances of hour row
+        tvec_unique, indices = np.unique(tvec_hourly, axis=0, return_inverse=True) 
         
         # Aggregate the data by summing over each unique timestamp
-        data_aggregated = np.zeros((len(tvec_unique), data.shape[1]))
+        data_a = np.zeros((len(tvec_unique), data.shape[1]))
         for i in range(len(tvec_unique)):
-            data_aggregated[i] = np.sum(data[indices == i], axis=0)
+            data_a[i] = np.sum(data[indices == i], axis=0)
         
-        data_a = data_aggregated
-        
+        # Add four columns of zeros to replace the removed once
         tvec_a = np.hstack((tvec_unique, np.zeros((tvec_unique.shape[0], 2), dtype=tvec_unique.dtype)))
-    #    tvec_a = np.hstack((np.zeros((tvec_a.shape[0], 3), dtype=tvec_a.dtype), tvec_a))
-        
-        print('------------ TVEC Hour --------------')
-        print(tvec_a)
-        print(len(tvec_a))
-        print('--------------------------------')
-        
-        print('------------ DATA --------------')
-        print(data_a)
-        print('--------------------------------')
-        
+
         return (tvec_a, data_a)
 
     elif period == 'day':
-        tvec_hourly = tvec[:,1 :3]  #Only look at "hour" row
+        #Only look at "day" colum
+        tvec_hourly = tvec[:,0 :3]  
 
-        tvec_unique, indices = np.unique(tvec_hourly, axis=0, return_inverse=True) #Find unique instances of hour row
+        #Find unique instances of hour row
+        tvec_unique, indices = np.unique(tvec_hourly, axis=0, return_inverse=True) 
 
         
         # Aggregate the data by summing over each unique timestamp
-        data_aggregated = np.zeros((len(tvec_unique), data.shape[1]))
+        data_a = np.zeros((len(tvec_unique), data.shape[1]))
         for i in range(len(tvec_unique)):
-            data_aggregated[i] = np.sum(data[indices == i], axis=0)
+            data_a[i] = np.sum(data[indices == i], axis=0)
         
-        data_a = data_aggregated
-        
+        # Add three columns of zeros to replace the removed once
         tvec_a = np.hstack((tvec_unique, np.zeros((tvec_unique.shape[0], 3), dtype=tvec_unique.dtype)))
-        tvec_a = np.hstack((np.zeros((tvec_a.shape[0], 1), dtype=tvec_a.dtype), tvec_a))
-        
-        print('------------ TVEC Day --------------')
-        print(tvec_a)
-        print(len(tvec_a))
-        print('--------------------------------')
-        
-        print('------------ DATA --------------')
-        print(data_a)
-        print('--------------------------------')
         
         return (tvec_a, data_a)
         
         
-
     elif period == 'month':
-        tvec_hourly = tvec[:,1 :2]  #Only look at "hour" row
+        #Only look at "month" colum
+        tvec_hourly = tvec[:,0 :2]  
 
-        tvec_unique, indices = np.unique(tvec_hourly, axis=0, return_inverse=True) #Find unique instances of hour row
-
+        #Find unique instances of hour month
+        tvec_unique, indices = np.unique(tvec_hourly, axis=0, return_inverse=True) 
         
         # Aggregate the data by summing over each unique timestamp
-        data_aggregated = np.zeros((len(tvec_unique), data.shape[1]))
+        data_a = np.zeros((len(tvec_unique), data.shape[1]))
         for i in range(len(tvec_unique)):
-            data_aggregated[i] = np.sum(data[indices == i], axis=0)
+            data_a[i] = np.sum(data[indices == i], axis=0)
         
-        data_a = data_aggregated
-        
+        # Add four columns of zeros to replace the removed once
         tvec_a = np.hstack((tvec_unique, np.zeros((tvec_unique.shape[0], 4), dtype=tvec_unique.dtype)))
-        tvec_a = np.hstack((np.zeros((tvec_a.shape[0], 1), dtype=tvec_a.dtype), tvec_a))
-        
-        print('------------ TVEC Month --------------')
-        print(tvec_a)
-        print(len(tvec_a))
-        print('--------------------------------')
-        
-        print('------------ DATA --------------')
-        print(data_a)
-        print('--------------------------------')
-        
+
         return (tvec_a, data_a)
         
     elif period == 'hour of the day':
-        tvec_hourly = tvec[:,3 :4]  #Only look at "hour" row
+        #Only look at "hours of the day" colum
+        tvec_hourly = tvec[:, [0, 3]]  
 
-        tvec_unique, indices = np.unique(tvec_hourly, axis=0, return_inverse=True) #Find unique instances of hour row
+        #Find unique instances of hour in a day
+        tvec_unique, indices = np.unique(tvec_hourly, axis=0, return_inverse=True) 
 
         
         # Aggregate the data by summing over each unique timestamp
-        data_aggregated = np.zeros((len(tvec_unique), data.shape[1]))
+        data_a = np.zeros((len(tvec_unique), data.shape[1]))
         for i in range(len(tvec_unique)):
-            data_aggregated[i] = np.sum(data[indices == i], axis=0)
+            data_a[i] = np.sum(data[indices == i], axis=0)
         
-        data_a = data_aggregated
-        
+        # Add two columns of zeros to replace mins and secs
         tvec_a = np.hstack((tvec_unique, np.zeros((tvec_unique.shape[0], 2), dtype=tvec_unique.dtype)))
-        tvec_a = np.hstack((np.zeros((tvec_a.shape[0], 3), dtype=tvec_a.dtype), tvec_a))
         
-        print('------------ TVEC HOD --------------')
-        print(tvec_a)
-        print(len(tvec_a))
-        print('--------------------------------')
-        
-        print('------------ DATA --------------')
-        print(data_a)
-        print('--------------------------------')
+        # Add two columns of zeros to replace days and months
+        tvec_a = np.insert(tvec_a, 1, np.zeros((tvec_unique.shape[0]), dtype=tvec_unique.dtype), axis=1)
+        tvec_a = np.insert(tvec_a, 1, np.zeros((tvec_unique.shape[0]), dtype=tvec_unique.dtype), axis=1)
         
         return (tvec_a, data_a)
 
