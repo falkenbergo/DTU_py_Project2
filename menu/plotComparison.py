@@ -66,7 +66,7 @@ def plotComparison(tvec, data, plot, combine_zones, period):
     # Set title and labels for axes
     ax.set_title(f"Electricity Consumption - Year {round(tvec[0][0])}")
     ax.set_xlabel(f"Time ({period.capitalize()})")
-    ax.set_ylabel(f"Consumption (kWh)")
+    ax.set_ylabel("Consumption (kWh)")
     
     # Initialize the bottom array for stacking bars
     bottom = np.zeros(len(formatted_tvec))
@@ -96,7 +96,7 @@ def plotComparison(tvec, data, plot, combine_zones, period):
                     # Use bar chart and stack bars on top of each other
                     ax.bar(formatted_tvec, zone_data, label=zone_label, bottom=bottom)
                     bottom += zone_data  # Update bottom array for stacking
-                    print("use bar")
+                   # print("use bar") # Debugging
                 
                 else:
                     # Uses line chart
