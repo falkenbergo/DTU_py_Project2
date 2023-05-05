@@ -2,9 +2,10 @@
 """
 Created on Mon May  1 13:58:31 2023
 
-@author: Marc
+@author: Marc(s195088)
 """
 
+#Libraries
 from rich import print as rprint
 from rich.panel import Panel
 

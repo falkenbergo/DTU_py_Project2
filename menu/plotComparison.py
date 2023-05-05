@@ -2,10 +2,33 @@
 
 # -*- coding: utf-8 -*-
 """
-Created on Mon May  1 17:56:26 2023
+Created on Thu April  27 07:56:26 2023
 
 @author: Marc(S195088)
 """
+
+#==============================================================================
+#Function Description:
+#The plotComparison function makes a graph to show how much electricity is used 
+#in different areas during a certain time. It uses time values and electricity 
+#and other options as input and shows a graph for the chosen areas.
+
+#Usage:
+#   plotComparison(tvec, data, plot, combine_zones, period)
+
+#Input:
+
+#   tvec: Time values for the data
+#   data: Electricity consumption data for the zones
+#   plot: Boolean values indicating which zones to include in the plot (list)
+#   combine_zones: Boolean value indicating whether to combine the selected zones or not (bool)
+#   period: Time period to format the time values (string)
+#Output:
+#Plot showing the electricity consumption data for the selected zones over the specified time period
+#
+#- Written by Marc(s195088)
+#==============================================================================
+
 
 # ============================================================================#
 #                                LIBRARIES                                    #

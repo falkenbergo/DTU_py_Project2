@@ -9,33 +9,20 @@ Created on Fri Apr 28 10:05:42 2023
 #                                LIBRARIES                                    #
 # ============================================================================#
 
+# Using nympy as np
 import numpy as np
 
 # Help to register if filename is present in path
 import os 
 
-# Help to doing plots in "Visualize electricity consumption"
-##import matplotlib.pyplot as plt
-##import pandas as pd
-
-# Loadingbar for "Load measurements"
-##from rich.progress import Progress
-##from rich.progress import track
-##from time import sleep
-
-# Visual display of loaded data and corrupted choice
-##from rich import print as rprint #Needed to ad rprint to handle both printf and rich
-##from rich.panel import Panel
-
-########### Visual plotting menu 4##########
+##################################
+# Visual plotting menu
 from rich import box
 from rich.console import Console
 from rich.table import Table
-##from rich.text import Text
 
 console = Console()
-
-###########################################
+##################################
 
 
 # ============================================================================#
@@ -59,9 +46,6 @@ from data_aggregation import aggregate_measurements
 # Import statistics function
 from data_statistics import print_statistics
 
-
-#from dataStatistics import dataStatistics
-
 #Importing plot function
 from plotComparison import plotComparison
 
@@ -71,24 +55,31 @@ from plotComparison import plotComparison
 #                                   Menu                                      #
 # ============================================================================#
 
+# Defining both menues used in the main script
 menuItems = np.array(["Load data", "Aggregate data", "Display statistics", "Visualize electricity consumption", "Quit\n"])
 menuDataload = np.array(["Forward fill", "Backward fill", 'Drop'])
 
+# Defined to check if data is loaded or aggregated
 data_loaded = False
 aggregated = False
 
-
+# Defining is needed when doing if statement "data_loaded"
 filename = []
 corruptedData = []
 
+
 while True:
     
+    # Displaying what data and handling of it, if data loaded
     if data_loaded:
         display_loaded_data_info(filename, corruptedData)
+        
+    # Displaying of main menu
     choice = displayMenu(menuItems)
 
 # =======================================#
 #  Enter filename - "Load measurements"  #
+#  Made by: Marc s195088                 #
 # =======================================#
 
     if choice == 1:
@@ -148,6 +139,7 @@ while True:
   
 # ============================================#
 #                Aggregate data               #
+#  Made by: Anders S184198                    #
 # ============================================#
 
     elif choice == 2:
@@ -190,6 +182,7 @@ while True:
                     print("Invalid choice, please try again...")
                     
             
+            
             aggregated = True
             print("Data aggregated successfully")
         else:
@@ -199,6 +192,7 @@ while True:
 
 # ============================================#
 #              Display statistics             #
+#  Made by: Anders S184198                    #
 # ============================================#
     elif choice == 3:
         if data_loaded & aggregated:
@@ -210,6 +204,7 @@ while True:
 
 # ============================================#
 #       Visualize electricity consumption     #
+#  Made by: Marc s195088                      #
 # ============================================#
 
 
@@ -281,6 +276,7 @@ while True:
 
 # ============================================#
 #                    Quit                     #
+#  Made by: Marc s195088                      #
 # ============================================#
     elif choice == 5:
         print("\nExiting the program")

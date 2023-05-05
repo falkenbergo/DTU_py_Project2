@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-Created on Mon April  29 20:37:36 2023
+Created on Tue April  25 20:37:36 2023
 
 @author: Marc(s195088)
 """
@@ -10,19 +10,18 @@ Created on Mon April  29 20:37:36 2023
 # ============================================================================#
 
 #Using these libraries to display the correct month with the data 
-from datetime import datetime
 import calendar
 
 #==============================================================================
 #The timeFormat function changes how time is displayed based on the period.
 #It formats the time using year, month, day, hour, minute, and second.
 #Usage:
-#   formatted_tvec = timeFormat(tvec, period)
+#   formatted_tvec = timeFormat
 #Input:
-#   tvec: Time values (list with np.array)
-#   "period: Time period to format (string)
+#   tvec: Time values (timevector)
+#   "period: Time period to format
 #Output:
-#   formatted_tvec: Formatted time values (list)
+#   formatted_tvec: Formatted time values
 #
 #- Written by Marc(s195088)
 #==============================================================================

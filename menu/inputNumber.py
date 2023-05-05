@@ -2,7 +2,7 @@
 """
 Created on Mon Mar 27 16:43:39 2023
 
-@author: Falkenbergo
+@author: Marc(s195088)
 """
 
 """
@@ -29,6 +29,7 @@ Added error handling, if wrong number or letter is prompted
 #     Same goes if the value inputtet is not an integer.
 #
 # - Taken from class lecture
+# -   modded: Added error handling, if wrong number or letter is prompted
 # 
 # =============================================================================
 
