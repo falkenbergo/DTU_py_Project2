@@ -41,9 +41,9 @@ def plotComparison(tvec, data, plot, combine_zones, period):
     fig, ax = plt.subplots()
     
     # Set title and labels for axes
-    ax.set_title("Electricity Consumption")
+    ax.set_title(f"Electricity Consumption - Year {round(tvec[0][0])}")
     ax.set_xlabel(f"Time ({period.capitalize()})")
-    ax.set_ylabel("Consumption (kW)")
+    ax.set_ylabel(f"Consumption (kWh)")
     
     # Initialize the bottom array for stacking bars
     bottom = np.zeros(len(formatted_tvec))

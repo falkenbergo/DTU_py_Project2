@@ -15,23 +15,23 @@ import numpy as np
 import os 
 
 # Help to doing plots in "Visualize electricity consumption"
-import matplotlib.pyplot as plt
-import pandas as pd
+##import matplotlib.pyplot as plt
+##import pandas as pd
 
 # Loadingbar for "Load measurements"
-from rich.progress import Progress
-from rich.progress import track
-from time import sleep
+##from rich.progress import Progress
+##from rich.progress import track
+##from time import sleep
 
 # Visual display of loaded data and corrupted choice
-from rich import print as rprint #Needed to ad rprint to handle both printf and rich
-from rich.panel import Panel
+##from rich import print as rprint #Needed to ad rprint to handle both printf and rich
+##from rich.panel import Panel
 
 ########### Visual plotting menu 4##########
 from rich import box
 from rich.console import Console
 from rich.table import Table
-from rich.text import Text
+##from rich.text import Text
 
 console = Console()
 
@@ -44,9 +44,6 @@ console = Console()
 
 # Import load_measuremnts function
 from load_measurements import load_measurements
-
-# Function for loading the data. Showing a loading bar
-from loadingBar import process_data
 
 # Layout for dataLoaded and handling for corrupted data
 from display_loaded_data_info import display_loaded_data_info
@@ -80,7 +77,12 @@ menuDataload = np.array(["Forward fill", "Backward fill", 'Drop'])
 data_loaded = False
 aggregated = False
 
+
+filename = []
+corruptedData = []
+
 while True:
+    
     if data_loaded:
         display_loaded_data_info(filename, corruptedData)
     choice = displayMenu(menuItems)

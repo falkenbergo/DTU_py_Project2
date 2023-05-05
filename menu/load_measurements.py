@@ -47,9 +47,9 @@ def load_measurements(filename, fmode):
     progress_bar = Progress()
     task_id = progress_bar.add_task("[green]Loading data...", total=total_lines)
     
-    # Start the progress bar
+    # Start the progressbar
     with progress_bar:
-        # Read the file line by line, split each line into values, and remove space
+        # Read the file line by line split each line into values and remove space
         with open(filename) as file:
             lines = []
             line_number = 0

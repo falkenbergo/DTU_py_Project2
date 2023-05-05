@@ -46,7 +46,7 @@ def timeFormat(tvec, period):
                 month_name = calendar.month_name[month]
                 formatted_tvec.append(f"{month_name}")
             else:
-                formatted_tvec.append(f"{year}/{month}/{day}")
+                formatted_tvec.append(f"{round(tvec[0][0])}/{month}/{day}")
 
     # For hour or sec, use "year/month/day - hour:minute:second" format
     elif period in ["hour", "sec"]:
@@ -54,7 +54,7 @@ def timeFormat(tvec, period):
             # Get year, month, day, hour, minute, second
             year, month, day, hour, minute, second = row.astype(int)
             # Add formatted time to list
-            formatted_tvec.append(f"{year}/{month}/{day} - {hour}:{minute}:{second}")
+            formatted_tvec.append(f"{round(tvec[0][0])}/{month}/{day} - {hour}:{minute}:{second}")
 
     # For 'hour of the day', list hours from 0 to 23
     elif period == "hour of the day":
